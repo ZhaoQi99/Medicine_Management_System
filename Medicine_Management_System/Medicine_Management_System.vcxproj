@@ -156,6 +156,7 @@
     <ClCompile Include="Medicine_Management_System.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Array.h" />
     <ClInclude Include="function.h" />
     <ClInclude Include="Medicine.h" />
     <ClInclude Include="Menu.h" />
