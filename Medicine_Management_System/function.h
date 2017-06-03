@@ -7,7 +7,7 @@
 #include<cstdio>
 #include"Menu.h"
 #include"Array.h"
-#include<cstdlib>
+
 
 extern ArrayOfPersonnel array_of_personnel;             //ÉùÃ÷Íâ²¿¶ÔÏó
 extern ArrayOfUser array_of_user;                       //ÉùÃ÷Íâ²¿¶ÔÏó
@@ -19,6 +19,7 @@ using std::wcin;
 using std::endl;
 using std::string;
 using std::system;
+using std::stoi;
 
 void Function_Personnel_Menu_Sub();                     //ÈËÔ±¹ÜÀí²Ëµ¥µÄ×Ó²Ëµ¥
 void Function_Main_Menu();                              //Ö÷²Ëµ¥
@@ -111,7 +112,7 @@ void Function_Main_Menu()                               //Ö÷²Ëµ¥µÄ¹¦ÄÜÊµÏÖ
 		{
 		case 1:Function_Medicine_Management_Menu(); break;     //¿â´æ¹ÜÀí
 		case 2:Function_Personnel_Menu(); break;        //ÈËÔ±¹ÜÀí
-		case 3:array_of_user.login(NO_USERS); Function_Login_Menu(); break;
+		case 3:array_of_user.login(NO_USERS); Function_Login_Menu(); break;                   
 														//×¢ÏúÓÃ»§
 		}
 	}
@@ -394,7 +395,7 @@ void Show_input_personnel()                             //²éÑ¯PersonnelµÄ¹¦ÄÜÊµÏ
 	else
 	{
 		int number;
-		number = atoi(temp.c_str());                            //½«string×ª»»³ÉintĞÍ
+		number = stoi(temp);                            //½«string×ª»»³ÉintĞÍ
 		int index = array_of_personnel.FindIndex(number);
 		//°´ÕÕ±àºÅ²éÏÂ±ê
 		array_of_personnel.Show(index, SHOW_TITLES);
@@ -441,7 +442,7 @@ void Show_input_medicine()                              //²éÑ¯Ò©Æ·µÄ¹¦ÄÜÊµÏÖ
 	else
 	{
 		int number;
-		number = atoi(temp.c_str());
+		number = stoi(temp);
 		int index = array_of_medicine.FindIndex(number);
 		array_of_medicine.Show(index, SHOW_TITLES);
 		system("pause");
@@ -460,14 +461,14 @@ void Add_input_medicine()                               //Ìí¼ÓÒ©Æ·µÄ¹¦ÄÜÊµÏÖ
 	array_of_medicine.ShowAllMedicine();
 	cout << "--------------------------------------------------------------------------------" << endl << endl;
 
-	cout << "Ò©Æ·Ãû£º ";
+	cout << "Ò©Æ·Ãû³Æ£º ";
 	wflush();
 	getline(cin, name);
 	cout << "Ò©Æ·±àºÅ£º ";
 	cin >> number;
-	cout << "ÊıÁ¿£º ";
+	cout << "Ò©Æ·ÊıÁ¿£º ";
 	cin >> amount;
-	cout << "¼Û¸ñ£º ";
+	cout << "Ò©Æ·µ¥¼Û£º ";
 	cin >> price;
 
 	array_of_medicine.Add(number, name, amount, price);
@@ -501,12 +502,7 @@ void Add_output_medicine()
 		name = array_of_medicine.medicine[index].getName();
 		price = array_of_medicine.medicine[index].getPrice();
 
-		old_authority = array_of_user.getCurrentUser();
-		array_of_user.login(IS_ADMIN);
-
 		array_of_medicine.Add(number, name, -amount, price);
-
-		array_of_user.login(old_authority);
 	}
 
 	system("pause");
