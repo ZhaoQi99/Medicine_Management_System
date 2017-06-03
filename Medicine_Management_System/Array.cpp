@@ -150,15 +150,14 @@ ArrayOfMedicine::~ArrayOfMedicine()
 // 添加或更新一条记录
 void ArrayOfMedicine::Add(int t_number, string t_name, int t_amount, double t_price)
 {
-	int judge = checkFormat(t_number, t_name);
-	if (catchError(judge))
+	if (getCurrentUser() == IS_MANAGER)
 	{
-		if (record_index > 900)
+		if (t_amount > 0)
 		{
-			cout << "存储空间不足，剩余 " << 1000 - record_index << " 条记录空间可供使用。" << endl;
+			catchError(E_AUTHORITY);
 		}
-		if (judge == W_UPDATE_MEDICINE)
-		{	
+		else
+		{
 			int t_index = FindIndex(t_number);
 			if (medicine[t_index].amount + t_amount < 0)
 			{
@@ -172,16 +171,42 @@ void ArrayOfMedicine::Add(int t_number, string t_name, int t_amount, double t_pr
 				cout << "--药品信息更新成功！--" << endl << endl;
 			}
 		}
-		else
+	}
+	else
+	{
+		int judge = checkFormat(t_number, t_name);
+		if (catchError(judge))
 		{
-			medicine[record_index].number = t_number;
-			medicine[record_index].name = t_name;
-			medicine[record_index].amount = t_amount;
-			medicine[record_index].price = t_price;
-			medicine[record_index].accessibility = true;
-			medicine[record_index].index = record_index;
-			record_index++;
-			cout << "--药品入库成功！--" << endl << endl;
+			if (record_index > 900)
+			{
+				cout << "存储空间不足，剩余 " << 1000 - record_index << " 条记录空间可供使用。" << endl;
+			}
+			if (judge == W_UPDATE_MEDICINE)
+			{
+				int t_index = FindIndex(t_number);
+				if (medicine[t_index].amount + t_amount < 0)
+				{
+					bool check_amount = catchError(E_AMOUNT);
+				}
+				else
+				{
+					medicine[t_index].name = t_name;
+					medicine[t_index].amount += t_amount;
+					medicine[t_index].price = t_price;
+					cout << "--药品信息更新成功！--" << endl << endl;
+				}
+			}
+			else
+			{
+				medicine[record_index].number = t_number;
+				medicine[record_index].name = t_name;
+				medicine[record_index].amount = t_amount;
+				medicine[record_index].price = t_price;
+				medicine[record_index].accessibility = true;
+				medicine[record_index].index = record_index;
+				record_index++;
+				cout << "--药品入库成功！--" << endl << endl;
+			}
 		}
 	}
 }
@@ -319,9 +344,16 @@ int ArrayOfMedicine::checkFormat(int t_number, string t_name)
 		}
 		return NO_ERROR;
 	}
-	else
+	else if (getCurrentUser() == IS_MANAGER)
 	{
-		return E_AUTHORITY;
+		if (t_name == IGNORE)
+		{
+			return NO_ERROR;
+		}
+		else
+		{
+			return E_AUTHORITY;
+		}
 	}
 }
 
